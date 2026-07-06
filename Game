@@ -1,0 +1,89 @@
+# Create the game board.
+# Initially, each position contains its index (0-8).
+# Later, players replace these numbers with X or O.
+board = ["0", "1", "2",
+         "3", "4", "5",
+         "6", "7", "8"]
+
+
+# Function: Display the board
+def display():
+    print()
+    print(board[0], "|", board[1], "|", board[2])
+    print("--+---+--")
+    print(board[3], "|", board[4], "|", board[5])
+    print("--+---+--")
+    print(board[6], "|", board[7], "|", board[8])
+    print()
+
+
+# Function: Get player move
+def player_move(player):
+    while True:
+        try:
+            pos = int(input(f"Player {player}, Enter position (0-8): "))
+
+            if pos < 0 or pos > 8:
+                print("Invalid position.")
+                continue
+
+            if board[pos] not in ["X", "O"]:
+                board[pos] = player
+                break
+            else:
+                print("Position already occupied.")
+
+        except ValueError:
+            print("Enter a valid number.")
+
+
+# Function: Check winner
+def check_winner(player):
+    wins = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ]
+
+    for combo in wins:
+        if board[combo[0]] == board[combo[1]] == board[combo[2]] == player:
+            return True
+
+    return False
+
+
+# Function: Check draw
+def check_draw():
+    for cell in board:
+        if cell not in ["X", "O"]:
+            return False
+    return True
+
+
+# Main Game
+current = "X"
+
+while True:
+    display()
+
+    player_move(current)
+
+    if check_winner(current):
+        display()
+        print(f"Player {current} Wins!")
+        break
+
+    if check_draw():
+        display()
+        print("Game Draw!")
+        break
+
+    if current == "X":
+        current = "O"
+    else:
+        current = "X"
